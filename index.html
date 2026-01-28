@@ -12,7 +12,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
-        /* --- STYLE NỀN --- */
+        /* GIỮ NGUYÊN STYLE NHƯ BÀI TRƯỚC */
         body {
             font-family: 'Montserrat', sans-serif;
             background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
@@ -29,7 +29,6 @@
             overflow: hidden; border: 1px solid rgba(255,255,255,0.8);
         }
 
-        /* --- HEADER --- */
         .header-section {
             background: white; padding: 20px 15px 15px;
             text-align: center; border-bottom: 4px solid #764ba2;
@@ -41,7 +40,6 @@
         .contact-row { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; font-weight: 600; margin-top: 5px;}
         .contact-item i { color: #764ba2; margin-right: 4px; }
 
-        /* --- FORM --- */
         .form-body { padding: 25px 30px; }
         .form-section-title { color: #764ba2; font-weight: 700; margin: 20px 0 10px; border-bottom: 1px solid #ddd; padding-bottom: 5px; text-transform: uppercase; font-size: 0.9rem; }
         .form-label { font-weight: 600; font-size: 0.85rem; margin-bottom: 2px; }
@@ -54,7 +52,6 @@
         }
         .btn-submit:hover { transform: translateY(-2px); }
 
-        /* FOOTER */
         .footer-section { background: #f8f9fa; padding: 15px; font-size: 0.75rem; border-top: 1px solid #ddd; color: #666; text-align: center; }
         .footer-highlight { color: #d63031; font-weight: 700; }
     </style>
@@ -66,7 +63,6 @@
         <div class="header-section">
             <img src="https://raw.githubusercontent.com/duongcanhquan/image/main/Logo%20Cao%20%C4%91a%CC%86%CC%89ng%20Vie%CC%A3%CC%82t%20My%CC%83%20-%20ba%CC%89n%20chua%CC%82%CC%89n%202025-01.png" alt="Logo Truong" class="logo-img">
             <h1 class="main-title">CỔNG ĐĂNG KÝ</h1>
-            
             <div class="school-info">
                 <div class="school-slogan">
                     TRƯỜNG CAO ĐẲNG THỰC HÀNH HÀNG ĐẦU TẠI MIỀN BẮC - ĐÀO TẠO ĐA NGÀNH NGHỀ<br>
@@ -80,7 +76,6 @@
         </div>
 
         <div class="form-body">
-            
             <form id="registerForm" onsubmit="submitForm(event)">
                 
                 <div class="form-section-title"><i class="fas fa-user-circle me-2"></i>1. Thông tin thí sinh</div>
@@ -93,7 +88,6 @@
                         <label class="form-label">Ngày sinh <span class="text-danger">*</span></label>
                         <input type="date" id="dob" class="form-control" required>
                     </div>
-
                     <div class="col-md-6">
                         <label class="form-label">Trường THPT / THCS <span class="text-danger">*</span></label>
                         <input type="text" id="highSchool" class="form-control" placeholder="Tên trường..." required>
@@ -102,7 +96,6 @@
                         <label class="form-label">Địa chỉ liên hệ <span class="text-danger">*</span></label>
                         <input type="text" id="address" class="form-control" placeholder="Xã/Phường, Quận/Huyện..." required>
                     </div>
-
                     <div class="col-md-4">
                         <label class="form-label">Số điện thoại <span class="text-danger">*</span></label>
                         <input type="tel" id="phone" class="form-control" placeholder="09xxxx..." required>
@@ -140,7 +133,7 @@
                     <div class="col-md-6">
                         <label class="form-label">Ngành đăng ký <span class="text-danger">*</span></label>
                         <select id="major" class="form-select text-primary fw-bold" required>
-                            <option value="">-- Đang tải danh sách ngành... --</option>
+                            <option value="">-- Đang tải ngành... --</option>
                         </select>
                     </div>
 
@@ -168,7 +161,6 @@
                 <button type="submit" id="btnSubmit" class="btn-submit">
                     <i class="fas fa-paper-plane me-2"></i>GỬI ĐĂNG KÝ
                 </button>
-
             </form>
         </div>
 
@@ -177,51 +169,43 @@
             <p class="mb-1">Thông tin là do thí sinh đăng ký là cơ sở để Nhà trường xét tuyển. Nếu thông tin không chính xác, kết quả sẽ bị huỷ.</p>
             <p class="mb-0 fw-bold">Kết quả xét tuyển sẽ được bảo lưu đến hết ngày 31/12/2025.</p>
         </div>
-
     </div>
 
     <script>
-        // --- 1. DÁN LINK GOOGLE SCRIPT MỚI CỦA BẠN VÀO ĐÂY ---
-        const API_URL = "https://script.google.com/macros/s/AKfycbx5X7kaMr-mF5RNsUzWSMunMxLyg3ydLIQ-VK7BaJ2poQG2mmyje0BgXVjndLvie7M_/exec"; 
+        // --- CẤU HÌNH API ---
+        const API_URL = "https://script.google.com/macros/s/AKfycbxrmKuix2qmn3wyVAzmZG4qF6r1-iFiJZm5fKTsloulmu2DbSOgMT8-lueRwVQDBS9S/exec"; 
 
-        // --- 2. HÀM TẢI DỮ LIỆU TỪ SHEET (CHẠY NGẦM) ---
-        document.addEventListener('DOMContentLoaded', () => {
-            // Không chặn form, gọi API ngầm
-            fetch(API_URL + "?action=get_lists")
-                .then(res => res.json())
-                .then(data => {
-                    if(data.status === 'success') {
-                        // Nạp Ngành
-                        const majorSel = document.getElementById('major');
-                        majorSel.innerHTML = '<option value="">-- Chọn Ngành Học --</option>';
-                        data.majors.forEach(m => {
-                            let opt = document.createElement("option");
-                            opt.value = m; opt.text = m;
-                            majorSel.add(opt);
-                        });
-
-                        // Nạp TVV
-                        const counSel = document.getElementById('counselor');
-                        counSel.innerHTML = '<option value="">-- Chọn Thầy/Cô --</option>';
-                        data.counselors.forEach(c => {
-                            let opt = document.createElement("option");
-                            opt.value = c; opt.text = c;
-                            counSel.add(opt);
-                        });
-                    } else {
-                        // Nếu lỗi logic, cho phép nhập tay hoặc hiện thông báo nhỏ
-                        console.error("Lỗi data");
-                    }
-                })
-                .catch(err => {
-                    console.error("Lỗi kết nối:", err);
-                    // Fallback: Nếu không tải được, hiển thị tùy chọn chung để form không bị chết
-                    document.getElementById('major').innerHTML = '<option value="Khác">-- Vui lòng nhập tay sau --</option>';
-                    document.getElementById('counselor').innerHTML = '<option value="Văn phòng Tuyển sinh">Văn phòng Tuyển sinh</option>';
+        // --- 1. TẢI DỮ LIỆU BẰNG JSONP (Đảm bảo 100% không lỗi) ---
+        // Hàm này sẽ được Google Script gọi lại
+        function handlePublicLists(data) {
+            if(data.status === 'success') {
+                const majorSel = document.getElementById('major');
+                majorSel.innerHTML = '<option value="">-- Chọn Ngành Học --</option>';
+                data.majors.forEach(m => {
+                    let opt = document.createElement("option");
+                    opt.value = m; opt.text = m;
+                    majorSel.add(opt);
                 });
+
+                const counSel = document.getElementById('counselor');
+                counSel.innerHTML = '<option value="">-- Chọn Thầy/Cô --</option>';
+                data.counselors.forEach(c => {
+                    let opt = document.createElement("option");
+                    opt.value = c; opt.text = c;
+                    counSel.add(opt);
+                });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Tạo thẻ Script động để gọi dữ liệu
+            const script = document.createElement('script');
+            // Thêm tham số callback=handlePublicLists
+            script.src = `${API_URL}?action=get_lists&callback=handlePublicLists&t=${new Date().getTime()}`;
+            document.body.appendChild(script);
         });
 
-        // --- 3. UI HELPER ---
+        // --- 2. XỬ LÝ UI ---
         function toggleScoreInput() {
             const select = document.getElementById('scoreSelect');
             const input = document.getElementById('scoreInput');
@@ -235,7 +219,7 @@
             }
         }
 
-        // --- 4. GỬI FORM ---
+        // --- 3. GỬI FORM ---
         function submitForm(e) {
             e.preventDefault();
             const btn = document.getElementById('btnSubmit');
@@ -243,12 +227,9 @@
             btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>ĐANG GỬI...';
             btn.disabled = true;
 
-            // Xử lý điểm số
             const scoreSelect = document.getElementById('scoreSelect').value;
             let finalScore = scoreSelect;
-            if (scoreSelect === 'other') {
-                finalScore = document.getElementById('scoreInput').value;
-            }
+            if (scoreSelect === 'other') finalScore = document.getElementById('scoreInput').value;
 
             const data = {
                 fullName: document.getElementById('fullName').value,
