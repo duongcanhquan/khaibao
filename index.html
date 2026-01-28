@@ -171,14 +171,16 @@
         </div>
     </div>
 
-    <script>
-        // --- CẤU HÌNH API ---
-        const API_URL = "https://script.google.com/macros/s/AKfycbxrmKuix2qmn3wyVAzmZG4qF6r1-iFiJZm5fKTsloulmu2DbSOgMT8-lueRwVQDBS9S/exec"; 
+   <script>
+        // 1. DÁN LINK EXEC MỚI CỦA BẠN VÀO ĐÂY
+        const API_URL = "https://script.google.com/macros/s/AKfycbykx5SY6VrKdKKoA6L3prBOLUifrkMIltEuhyP2-6r5Egt-UnaBjZuk7joyGiRzUdpc/exec"; 
 
-        // --- 1. TẢI DỮ LIỆU BẰNG JSONP (Đảm bảo 100% không lỗi) ---
-        // Hàm này sẽ được Google Script gọi lại
+        // 2. HÀM XỬ LÝ DỮ LIỆU TỪ SHEET (CALLBACK JSONP)
         function handlePublicLists(data) {
+            console.log("Dữ liệu nhận được:", data); // Debug xem có dữ liệu không
+
             if(data.status === 'success') {
+                // Nạp Ngành
                 const majorSel = document.getElementById('major');
                 majorSel.innerHTML = '<option value="">-- Chọn Ngành Học --</option>';
                 data.majors.forEach(m => {
@@ -187,6 +189,7 @@
                     majorSel.add(opt);
                 });
 
+                // Nạp TVV
                 const counSel = document.getElementById('counselor');
                 counSel.innerHTML = '<option value="">-- Chọn Thầy/Cô --</option>';
                 data.counselors.forEach(c => {
@@ -194,83 +197,26 @@
                     opt.value = c; opt.text = c;
                     counSel.add(opt);
                 });
+            } else {
+                console.error("Lỗi lấy danh sách");
             }
         }
 
+        // 3. KÍCH HOẠT TẢI DỮ LIỆU KHI MỞ WEB
         document.addEventListener('DOMContentLoaded', () => {
-            // Tạo thẻ Script động để gọi dữ liệu
             const script = document.createElement('script');
-            // Thêm tham số callback=handlePublicLists
+            // Gọi action=get_lists và callback=handlePublicLists
             script.src = `${API_URL}?action=get_lists&callback=handlePublicLists&t=${new Date().getTime()}`;
             document.body.appendChild(script);
         });
 
-        // --- 2. XỬ LÝ UI ---
-        function toggleScoreInput() {
-            const select = document.getElementById('scoreSelect');
-            const input = document.getElementById('scoreInput');
-            if (select.value === 'other') {
-                input.classList.remove('d-none');
-                input.required = true;
-                input.focus();
-            } else {
-                input.classList.add('d-none');
-                input.required = false;
-            }
-        }
-
-        // --- 3. GỬI FORM ---
+        // ... (Giữ nguyên hàm toggleScoreInput và submitForm) ...
+        
         function submitForm(e) {
-            e.preventDefault();
-            const btn = document.getElementById('btnSubmit');
-            const originalBtn = btn.innerHTML;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>ĐANG GỬI...';
-            btn.disabled = true;
-
-            const scoreSelect = document.getElementById('scoreSelect').value;
-            let finalScore = scoreSelect;
-            if (scoreSelect === 'other') finalScore = document.getElementById('scoreInput').value;
-
-            const data = {
-                fullName: document.getElementById('fullName').value,
-                dob: document.getElementById('dob').value,
-                highSchool: document.getElementById('highSchool').value,
-                address: document.getElementById('address').value,
-                phone: document.getElementById('phone').value,
-                email: document.getElementById('email').value,
-                motherPhone: document.getElementById('motherPhone').value,
-                situation: document.getElementById('situation').value,
-                educationSystem: document.getElementById('educationSystem').value,
-                major: document.getElementById('major').value,
-                score: finalScore,
-                counselor: document.getElementById('counselor').value
-            };
-
-            fetch(API_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                body: JSON.stringify(data),
-                headers: {'Content-Type': 'application/json'}
-            })
-            .then(() => {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'ĐĂNG KÝ THÀNH CÔNG!',
-                    html: `Hồ sơ của <b>${data.fullName}</b> đã được gửi đi.<br>Nhà trường sẽ liên hệ sớm nhất.`,
-                    confirmButtonColor: '#764ba2'
-                }).then(() => {
-                    document.getElementById('registerForm').reset();
-                    document.getElementById('scoreInput').classList.add('d-none');
-                    btn.innerHTML = originalBtn;
-                    btn.disabled = false;
-                });
-            })
-            .catch(err => {
-                Swal.fire('Lỗi', 'Không kết nối được hệ thống.', 'error');
-                btn.innerHTML = originalBtn;
-                btn.disabled = false;
-            });
+             // ... (Code submit cũ giữ nguyên) ...
         }
     </script>
+</body>
+</html>
 </body>
 </html>
