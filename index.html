@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    </head>
+<body>
+    <div class="glass-container">
+        <form id="studentForm">
+            </form>
+        <button onclick="submitData()">GỬI HỒ SƠ</button>
+    </div>
+
+    <script>
+        // DÁN URL BẠN VỪA DEPLOY Ở BƯỚC 3 VÀO ĐÂY
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyGNchPwJFdRFnIi4p4x-7yGNJysmFESYSFr7bfCmbHjrQK4gCdUhy5YzZJfVT3St9L/exec";
+
+        function submitData() {
+            const data = {
+                fullName: document.getElementById('fullName').value,
+                cccd: document.getElementById('cccd').value,
+                phone: document.getElementById('phone').value,
+                email: document.getElementById('email').value,
+                counselor: document.getElementById('counselor').value
+            };
+
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST', // Quan trọng: Phải là POST
+                mode: 'no-cors', // Quan trọng: Để không bị chặn
+                body: JSON.stringify(data),
+                headers: {'Content-Type': 'application/json'}
+            }).then(() => {
+                // Vì no-cors không trả kết quả, ta mặc định thành công
+                alert("Đăng ký thành công!");
+                document.getElementById('studentForm').reset();
+            }).catch(err => alert("Lỗi: " + err));
+        }
+    </script>
+</body>
+</html>
