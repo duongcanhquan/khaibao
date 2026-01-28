@@ -26,80 +26,36 @@
             background: rgba(255, 255, 255, 0.96);
             border-radius: 15px; 
             box-shadow: 0 15px 40px rgba(0,0,0,0.2);
-            overflow: hidden; 
+            overflow: hidden; border: 1px solid rgba(255,255,255,0.8);
         }
 
-        /* --- HEADER CHỈNH SỬA (GỌN HƠN) --- */
+        /* --- HEADER --- */
         .header-section {
-            background: white;
-            padding: 20px 15px 15px; /* Giảm padding */
-            text-align: center;
-            border-bottom: 4px solid #764ba2;
+            background: white; padding: 20px 15px 15px;
+            text-align: center; border-bottom: 4px solid #764ba2;
         }
-
-        .logo-img {
-            width: 180px; /* Logo nhỏ gọn */
-            height: auto;
-            margin-bottom: 10px;
-        }
-
-        .main-title {
-            color: #764ba2;
-            font-weight: 800;
-            font-size: 1.8rem; /* Giảm size chữ */
-            text-transform: uppercase;
-            margin-bottom: 5px;
-        }
-
-        .school-info {
-            font-size: 0.8rem;
-            color: #555;
-            background: #f1f2f6;
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px dashed #ccc;
-            line-height: 1.4;
-        }
-
-        .school-slogan {
-            font-weight: 700; color: #d63031;
-            text-transform: uppercase; margin-bottom: 5px;
-        }
-
+        .logo-img { width: 180px; height: auto; margin-bottom: 10px; }
+        .main-title { color: #764ba2; font-weight: 800; font-size: 1.8rem; text-transform: uppercase; margin-bottom: 5px; }
+        .school-info { font-size: 0.8rem; color: #555; background: #f1f2f6; padding: 10px; border-radius: 8px; border: 1px dashed #ccc; line-height: 1.4; }
+        .school-slogan { font-weight: 700; color: #d63031; text-transform: uppercase; margin-bottom: 5px; }
         .contact-row { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; font-weight: 600; margin-top: 5px;}
         .contact-item i { color: #764ba2; margin-right: 4px; }
 
-        /* --- FORM (TỐI ƯU KHOẢNG CÁCH) --- */
-        .form-body { padding: 25px 30px; } /* Giảm padding */
-        
-        .form-section-title {
-            color: #764ba2; font-weight: 700;
-            margin: 20px 0 10px; border-bottom: 1px solid #ddd;
-            padding-bottom: 5px; text-transform: uppercase; font-size: 0.9rem;
-        }
-        
+        /* --- FORM --- */
+        .form-body { padding: 25px 30px; }
+        .form-section-title { color: #764ba2; font-weight: 700; margin: 20px 0 10px; border-bottom: 1px solid #ddd; padding-bottom: 5px; text-transform: uppercase; font-size: 0.9rem; }
         .form-label { font-weight: 600; font-size: 0.85rem; margin-bottom: 2px; }
-        .form-control, .form-select {
-            border-radius: 8px; padding: 8px 12px; border: 1px solid #ccc;
-            font-size: 0.9rem;
-        }
-        .form-control:focus, .form-select:focus {
-            border-color: #764ba2; box-shadow: 0 0 0 3px rgba(118, 75, 162, 0.1);
-        }
-
+        .form-control, .form-select { border-radius: 8px; padding: 8px 12px; border: 1px solid #ccc; font-size: 0.9rem; }
+        .form-control:focus, .form-select:focus { border-color: #764ba2; box-shadow: 0 0 0 3px rgba(118, 75, 162, 0.1); }
         .btn-submit {
-            background: linear-gradient(to right, #667eea, #764ba2); color: white;
-            border: none; border-radius: 50px; padding: 12px; width: 100%;
-            font-weight: 800; font-size: 1.1rem; margin-top: 25px;
-            box-shadow: 0 5px 15px rgba(118, 75, 162, 0.3); transition: 0.3s;
+            background: linear-gradient(to right, #667eea, #764ba2); color: white; border: none;
+            border-radius: 50px; padding: 12px; width: 100%; font-weight: 800; font-size: 1.1rem;
+            margin-top: 25px; box-shadow: 0 5px 15px rgba(118, 75, 162, 0.3); transition: 0.3s;
         }
         .btn-submit:hover { transform: translateY(-2px); }
 
         /* FOOTER */
-        .footer-section {
-            background: #f8f9fa; padding: 15px; font-size: 0.75rem;
-            border-top: 1px solid #ddd; color: #666; text-align: center;
-        }
+        .footer-section { background: #f8f9fa; padding: 15px; font-size: 0.75rem; border-top: 1px solid #ddd; color: #666; text-align: center; }
         .footer-highlight { color: #d63031; font-weight: 700; }
     </style>
 </head>
@@ -124,11 +80,8 @@
         </div>
 
         <div class="form-body">
-            <div id="loadingData" class="text-center text-primary py-3">
-                <i class="fas fa-circle-notch fa-spin me-2"></i>Đang kết nối hệ thống dữ liệu...
-            </div>
-
-            <form id="registerForm" onsubmit="submitForm(event)" style="display:none;">
+            
+            <form id="registerForm" onsubmit="submitForm(event)">
                 
                 <div class="form-section-title"><i class="fas fa-user-circle me-2"></i>1. Thông tin thí sinh</div>
                 <div class="row g-2">
@@ -187,7 +140,7 @@
                     <div class="col-md-6">
                         <label class="form-label">Ngành đăng ký <span class="text-danger">*</span></label>
                         <select id="major" class="form-select text-primary fw-bold" required>
-                            <option value="">-- Đang tải ngành... --</option>
+                            <option value="">-- Đang tải danh sách ngành... --</option>
                         </select>
                     </div>
 
@@ -231,15 +184,12 @@
         // --- 1. DÁN LINK GOOGLE SCRIPT MỚI CỦA BẠN VÀO ĐÂY ---
         const API_URL = "https://script.google.com/macros/s/AKfycbx5X7kaMr-mF5RNsUzWSMunMxLyg3ydLIQ-VK7BaJ2poQG2mmyje0BgXVjndLvie7M_/exec"; 
 
-        // --- 2. HÀM TẢI DỮ LIỆU TỪ SHEET (Realtime) ---
+        // --- 2. HÀM TẢI DỮ LIỆU TỪ SHEET (CHẠY NGẦM) ---
         document.addEventListener('DOMContentLoaded', () => {
+            // Không chặn form, gọi API ngầm
             fetch(API_URL + "?action=get_lists")
                 .then(res => res.json())
                 .then(data => {
-                    // Ẩn Loading, Hiện Form
-                    document.getElementById('loadingData').style.display = 'none';
-                    document.getElementById('registerForm').style.display = 'block';
-
                     if(data.status === 'success') {
                         // Nạp Ngành
                         const majorSel = document.getElementById('major');
@@ -259,12 +209,15 @@
                             counSel.add(opt);
                         });
                     } else {
-                        alert("Lỗi tải dữ liệu. Vui lòng tải lại trang.");
+                        // Nếu lỗi logic, cho phép nhập tay hoặc hiện thông báo nhỏ
+                        console.error("Lỗi data");
                     }
                 })
                 .catch(err => {
-                    console.error("Lỗi:", err);
-                    document.getElementById('loadingData').innerHTML = '<span class="text-danger">Không thể kết nối máy chủ. Vui lòng kiểm tra internet.</span>';
+                    console.error("Lỗi kết nối:", err);
+                    // Fallback: Nếu không tải được, hiển thị tùy chọn chung để form không bị chết
+                    document.getElementById('major').innerHTML = '<option value="Khác">-- Vui lòng nhập tay sau --</option>';
+                    document.getElementById('counselor').innerHTML = '<option value="Văn phòng Tuyển sinh">Văn phòng Tuyển sinh</option>';
                 });
         });
 
