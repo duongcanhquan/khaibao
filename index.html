@@ -1,38 +1,367 @@
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
-    </head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cổng Đăng Ký Nhập Học Trực Tuyến - LaPage University</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        /* --- 1. CORE STYLE --- */
+        :root {
+            --primary-grad: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.5);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            /* Animated Background */
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            padding: 40px 15px;
+            color: #4a4a4a;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* --- 2. CONTAINER --- */
+        .main-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 30px;
+            border: var(--glass-border);
+            box-shadow: var(--glass-shadow);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .header-banner {
+            background: var(--primary-grad);
+            padding: 40px;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+        
+        .header-banner::after {
+            content: '';
+            position: absolute;
+            bottom: -20px; left: 0; width: 100%; height: 40px;
+            background: inherit;
+            border-radius: 0 0 50% 50%; /* Đường cong mềm mại */
+        }
+
+        /* --- 3. FORM ELEMENTS --- */
+        .form-section-title {
+            color: #764ba2;
+            font-weight: 700;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+        }
+
+        .form-floating > .form-control, .form-floating > .form-select {
+            border-radius: 15px;
+            border: 1px solid #ddd;
+            background: rgba(255, 255, 255, 0.6);
+            height: calc(3.5rem + 2px);
+            line-height: 1.25;
+        }
+
+        .form-control:focus, .form-select:focus {
+            background: #fff;
+            border-color: #764ba2;
+            box-shadow: 0 0 0 0.25rem rgba(118, 75, 162, 0.15);
+        }
+
+        /* --- 4. BUTTONS --- */
+        .btn-submit {
+            background: var(--primary-grad);
+            border: none;
+            border-radius: 50px;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            color: white;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(118, 75, 162, 0.3);
+            width: 100%;
+            margin-top: 30px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(118, 75, 162, 0.4);
+        }
+
+        /* --- 5. RESPONSIVE --- */
+        @media (max-width: 768px) {
+            .header-banner { padding: 30px 20px; }
+            h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
 <body>
-    <div class="glass-container">
-        <form id="studentForm">
-            </form>
-        <button onclick="submitData()">GỬI HỒ SƠ</button>
+
+    <div class="container">
+        <div class="main-container animate__animated animate__fadeInUp">
+            
+            <div class="header-banner">
+                <i class="fas fa-university fa-3x mb-3 animate__animated animate__pulse animate__infinite"></i>
+                <h1 class="fw-bold mb-0">HỒ SƠ NHẬP HỌC TRỰC TUYẾN</h1>
+                <p class="opacity-75 mt-2">Điền thông tin chính xác để được hỗ trợ nhanh nhất</p>
+            </div>
+
+            <div class="p-4 p-md-5 pt-4">
+                <form id="admissionForm" onsubmit="submitForm(event)">
+                    
+                    <div class="form-section-title"><i class="fas fa-user me-2"></i>1. Thông tin thí sinh</div>
+                    
+                    <div class="row g-3">
+                        <div class="col-md-12">
+                            <div class="form-floating">
+                                <input type="text" class="form-control fw-bold text-uppercase text-primary" id="fullName" placeholder="Họ và Tên" required>
+                                <label>Họ và Tên (In hoa)</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="cccd" placeholder="Số CCCD" required>
+                                <label>Số CCCD/CMND</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="date" class="form-control" id="dob" required>
+                                <label>Ngày sinh</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <select class="form-select" id="gender" required>
+                                    <option value="">Chọn giới tính</option>
+                                    <option value="Nam">Nam</option>
+                                    <option value="Nữ">Nữ</option>
+                                </select>
+                                <label>Giới tính</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="pob" placeholder="Nơi sinh">
+                                <label>Nơi sinh (Tỉnh/TP)</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section-title"><i class="fas fa-address-book me-2"></i>2. Thông tin liên hệ</div>
+                    
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="tel" class="form-control" id="phone" placeholder="SĐT" required>
+                                <label>Số điện thoại cá nhân</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="email" class="form-control" id="email" placeholder="Email" required>
+                                <label>Email liên hệ</label>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="addressPermanent" placeholder="Địa chỉ thường trú">
+                                <label>Địa chỉ thường trú (Theo VNeID)</label>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="addressTemporary" placeholder="Địa chỉ hiện tại">
+                                <label>Nơi ở hiện tại (Nếu khác thường trú)</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section-title"><i class="fas fa-graduation-cap me-2"></i>3. Thông tin đăng ký</div>
+                    
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <select class="form-select" id="educationSystem" required>
+                                    <option value="Cao đẳng chính quy">Cao đẳng chính quy</option>
+                                    <option value="Trung cấp chuyên nghiệp">Trung cấp chuyên nghiệp</option>
+                                    <option value="Liên thông">Liên thông</option>
+                                </select>
+                                <label>Hệ đào tạo</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <select class="form-select" id="major" required>
+                                    <option value="">-- Chọn Ngành Học --</option>
+                                    <option value="Công nghệ thông tin">Công nghệ thông tin</option>
+                                    <option value="Quản trị kinh doanh">Quản trị kinh doanh</option>
+                                    <option value="Du lịch lữ hành">Du lịch lữ hành</option>
+                                    <option value="Ngôn ngữ Anh">Ngôn ngữ Anh</option>
+                                    <option value="Thiết kế đồ họa">Thiết kế đồ họa</option>
+                                </select>
+                                <label>Ngành đăng ký</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section-title"><i class="fas fa-user-tie me-2"></i>4. Cán bộ hỗ trợ</div>
+                    
+                    <div class="bg-light p-3 rounded-4 border border-dashed">
+                        <div class="form-floating">
+                            <select class="form-select fw-bold text-primary" id="counselor" required>
+                                <option value="">-- Chọn Cán bộ tư vấn --</option>
+                            </select>
+                            <label>Chọn Tư vấn viên đã hỗ trợ bạn</label>
+                        </div>
+                        <small class="text-muted ms-2 mt-1 d-block"><i class="fas fa-info-circle me-1"></i>Vui lòng chọn đúng cán bộ đã tư vấn để hồ sơ được xử lý nhanh nhất.</small>
+                    </div>
+
+                    <button type="submit" id="btnSubmit" class="btn-submit">
+                        <i class="fas fa-paper-plane me-2"></i>GỬI HỒ SƠ ĐĂNG KÝ
+                    </button>
+
+                </form>
+            </div>
+            
+            <div class="text-center pb-4 text-muted small">
+                &copy; 2026 LaPage Education System. All rights reserved.
+            </div>
+
+        </div>
     </div>
 
     <script>
-        // DÁN URL BẠN VỪA DEPLOY Ở BƯỚC 3 VÀO ĐÂY
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyGNchPwJFdRFnIi4p4x-7yGNJysmFESYSFr7bfCmbHjrQK4gCdUhy5YzZJfVT3St9L/exec";
+        /* --- CẤU HÌNH HỆ THỐNG --- */
+        
+        // 1. Dán Link Google Apps Script Web App của bạn vào đây
+        const API_URL = "https://script.google.com/macros/s/AKfycbyGNchPwJFdRFnIi4p4x-7yGNJysmFESYSFr7bfCmbHjrQK4gCdUhy5YzZJfVT3St9L/exec"; 
 
-        function submitData() {
-            const data = {
-                fullName: document.getElementById('fullName').value,
+        // 2. Danh sách Tư Vấn Viên (Bạn sửa danh sách này khi cần cập nhật)
+        // Đây là cách an toàn và nhanh nhất cho Web Tĩnh trên GitHub
+        const COUNSELOR_LIST = [
+            "Nguyễn Thị Lan Anh (TVV01)",
+            "Trần Minh Đức (TVV02)",
+            "Phạm Hoàng Yến (TVV03)",
+            "Lê Văn Hùng (TVV04)",
+            "Vũ Thu Hà (TVV05)",
+            "Hotline Tuyển Sinh"
+        ];
+
+        /* --- LOGIC CHƯƠNG TRÌNH --- */
+        
+        // Tự động load danh sách tư vấn viên khi mở web
+        document.addEventListener('DOMContentLoaded', function() {
+            const select = document.getElementById('counselor');
+            COUNSELOR_LIST.forEach(name => {
+                let option = document.createElement("option");
+                option.text = name;
+                option.value = name; // Giá trị gửi về Google Sheet
+                select.add(option);
+            });
+        });
+
+        function submitForm(e) {
+            e.preventDefault();
+            
+            const btn = document.getElementById('btnSubmit');
+            const originalContent = btn.innerHTML;
+            
+            // Hiệu ứng Loading
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>ĐANG KẾT NỐI HỆ THỐNG...';
+            btn.disabled = true;
+
+            // Thu thập dữ liệu từ Form
+            const formData = {
+                fullName: document.getElementById('fullName').value.toUpperCase(),
                 cccd: document.getElementById('cccd').value,
+                dob: document.getElementById('dob').value,
+                gender: document.getElementById('gender').value,
+                pob: document.getElementById('pob').value,
+                
                 phone: document.getElementById('phone').value,
                 email: document.getElementById('email').value,
+                addressPermanent: document.getElementById('addressPermanent').value,
+                addressTemporary: document.getElementById('addressTemporary').value,
+                
+                educationSystem: document.getElementById('educationSystem').value,
+                major: document.getElementById('major').value,
+                
                 counselor: document.getElementById('counselor').value
             };
 
-            fetch(GOOGLE_SCRIPT_URL, {
-                method: 'POST', // Quan trọng: Phải là POST
-                mode: 'no-cors', // Quan trọng: Để không bị chặn
-                body: JSON.stringify(data),
-                headers: {'Content-Type': 'application/json'}
-            }).then(() => {
-                // Vì no-cors không trả kết quả, ta mặc định thành công
-                alert("Đăng ký thành công!");
-                document.getElementById('studentForm').reset();
-            }).catch(err => alert("Lỗi: " + err));
+            // Gửi dữ liệu đi (POST)
+            fetch(API_URL, {
+                method: 'POST',
+                mode: 'no-cors', // Bắt buộc để bypass lỗi CORS khi gửi từ Github
+                body: JSON.stringify(formData),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(() => {
+                // Hiển thị thông báo thành công đẹp mắt
+                Swal.fire({
+                    icon: 'success',
+                    title: 'ĐĂNG KÝ THÀNH CÔNG!',
+                    html: `
+                        <p>Hồ sơ của thí sinh <b>${formData.fullName}</b> đã được lưu vào hệ thống.</p>
+                        <p>Mã hồ sơ sẽ được gửi về Email trong ít phút.</p>
+                        <hr>
+                        <small>Cán bộ <b>${formData.counselor}</b> sẽ sớm liên hệ xác nhận.</small>
+                    `,
+                    confirmButtonText: 'HOÀN TẤT',
+                    confirmButtonColor: '#764ba2',
+                    backdrop: `rgba(0,0,123,0.4)`
+                }).then(() => {
+                    document.getElementById('admissionForm').reset();
+                    window.scrollTo(0, 0);
+                    btn.innerHTML = originalContent;
+                    btn.disabled = false;
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'CÓ LỖI XẢY RA',
+                    text: 'Không thể kết nối đến máy chủ. Vui lòng kiểm tra internet hoặc thử lại sau.',
+                    confirmButtonColor: '#d33'
+                });
+                btn.innerHTML = originalContent;
+                btn.disabled = false;
+            });
         }
     </script>
+
 </body>
 </html>
