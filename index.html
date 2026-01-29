@@ -6,96 +6,127 @@
     <title>CỔNG ĐĂNG KÝ TRỰC TUYẾN</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { font-family: 'Montserrat', sans-serif; background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab); background-size: 400% 400%; animation: gradient 15s ease infinite; padding: 15px; }
+        :root { --glass: rgba(255, 255, 255, 0.95); --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        body { font-family: 'Montserrat', sans-serif; background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab); background-size: 400% 400%; animation: gradient 15s ease infinite; min-height: 100vh; padding: 20px; }
         @keyframes gradient { 0% {background-position:0% 50%} 50% {background-position:100% 50%} 100% {background-position:0% 50%} }
-        .glass-card { background: rgba(255,255,255,0.95); border-radius: 20px; padding: 30px; max-width: 900px; margin: auto; box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
+        .glass-card { background: var(--glass); border-radius: 20px; padding: 40px; max-width: 900px; margin: auto; box-shadow: 0 15px 35px rgba(0,0,0,0.1); backdrop-filter: blur(10px); }
         .section-title { font-weight: 800; color: #764ba2; text-transform: uppercase; border-left: 4px solid #667eea; padding-left: 10px; margin: 25px 0 15px 0; font-size: 0.9rem; }
-        .btn-submit { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; border-radius: 50px; color: white; padding: 15px; width: 100%; font-weight: 800; margin-top: 20px; }
+        .btn-submit { background: var(--primary-gradient); border: none; border-radius: 50px; color: white; padding: 15px; width: 100%; font-weight: 800; margin-top: 20px; transition: 0.3s; }
+        .btn-submit:hover { transform: scale(1.02); box-shadow: 0 10px 20px rgba(118,75,162,0.3); }
+        .footer-note { background: #fdf2f2; padding: 20px; border-radius: 12px; margin-top: 30px; font-size: 0.85rem; color: #d9534f; line-height: 1.6; border: 1px dashed #d9534f; text-align: justify; }
+        .header-info { color: #555; font-size: 0.9rem; font-weight: 700; margin-bottom: 20px; }
     </style>
 </head>
 <body>
-<div class="glass-card">
+<div class="glass-card animate__animated animate__fadeIn">
     <div class="text-center mb-4">
-        <img src="https://github.com/duongcanhquan/image/blob/main/Logo%20Cao%20%C4%91a%CC%86%CC%89ng%20Vie%CC%A3%CC%82t%20My%CC%83%20-%20ba%CC%89n%20chua%CC%82%CC%89n%202025-01.png?raw=true" style="max-width: 180px;">
-        <h2 class="fw-800 mt-3">CỔNG ĐĂNG KÝ TRỰC TUYẾN</h2>
-        <p class="small fw-bold text-muted">TRƯỜNG CAO ĐẲNG THỰC HÀNH HÀNG ĐẦU TẠI MIỀN BẮC</p>
+        <img src="https://github.com/duongcanhquan/image/blob/main/Logo%20Cao%20%C4%91a%CC%86%CC%89ng%20Vie%CC%A3%CC%82t%20My%CC%83%20-%20ba%CC%89n%20chua%CC%82%CC%89n%202025-01.png?raw=true" style="max-width: 200px;" class="mb-3">
+        <h2 class="fw-800 text-uppercase">CỔNG ĐĂNG KÝ TRỰC TUYẾN</h2>
+        <p class="header-info text-uppercase">TRƯỜNG CAO ĐẲNG THỰC HÀNH HÀNG ĐẦU TẠI MIỀN BẮC - ĐÀO TẠO ĐA NGÀNH NGHỀ - HỖ TRỢ GIỚI THIỆU VIỆC LÀM SAU KHI RA TRƯỜNG CHO SINH VIÊN</p>
+        <div class="small fw-bold text-primary">
+            <i class="fa-solid fa-location-dot"></i> Đ/c: Số 168 Trịnh Văn Bô - Nam Từ Liêm - Hà Nội <br>
+            <i class="fa-solid fa-phone"></i> Hotline: 02473051212 - 0982856648
+        </div>
     </div>
 
     <form id="regForm">
         <div class="section-title">1. Thông tin cá nhân</div>
         <div class="row g-3">
-            <div class="col-md-4"><label class="small fw-bold">Họ và tên *</label><input type="text" name="fullName" class="form-control" required></div>
-            <div class="col-md-4 col-6"><label class="small fw-bold">Ngày sinh *</label><input type="date" name="dob" class="form-control" required></div>
-            <div class="col-md-4 col-6"><label class="small fw-bold">Giới tính *</label><select name="gender" class="form-select"><option value="Nam">Nam</option><option value="Nữ">Nữ</option></select></div>
-            <div class="col-md-4"><label class="small fw-bold">Nơi sinh *</label><input type="text" name="pob" class="form-control" required></div>
-            <div class="col-md-4"><label class="small fw-bold">Dân tộc *</label><input type="text" name="ethnicity" class="form-control" required></div>
-            <div class="col-md-4"><label class="small fw-bold">Số CCCD *</label><input type="text" name="cccd" class="form-control" required></div>
-            <div class="col-md-6"><label class="small fw-bold">SĐT Cá nhân *</label><input type="tel" name="phone" class="form-control" pattern="[0-9]{10}" required></div>
-            <div class="col-md-6"><label class="small fw-bold">Email *</label><input type="email" name="email" class="form-control" required></div>
-            <div class="col-12"><label class="small fw-bold">Địa chỉ thường trú *</label><input type="text" name="address" class="form-control" required></div>
+            <div class="col-md-4"><label class="form-label fw-bold small">Họ và tên *</label><input type="text" name="fullName" class="form-control" required></div>
+            <div class="col-md-4 col-6"><label class="form-label fw-bold small">Ngày sinh *</label><input type="date" name="dob" class="form-control" required></div>
+            <div class="col-md-4 col-6"><label class="form-label fw-bold small">Giới tính *</label><select name="gender" class="form-select"><option value="Nam">Nam</option><option value="Nữ">Nữ</option></select></div>
+            <div class="col-md-4"><label class="form-label fw-bold small">Nơi sinh *</label><input type="text" name="pob" class="form-control" required></div>
+            <div class="col-md-4"><label class="form-label fw-bold small">Dân tộc *</label><input type="text" name="ethnicity" class="form-control" required></div>
+            <div class="col-md-4"><label class="form-label fw-bold small">Số CCCD *</label><input type="text" name="cccd" class="form-control" required></div>
+            <div class="col-md-6"><label class="form-label fw-bold small">SĐT Cá nhân *</label><input type="tel" name="phone" class="form-control" pattern="[0-9]{10}" required></div>
+            <div class="col-md-6"><label class="form-label fw-bold small">Email *</label><input type="email" name="email" class="form-control" required></div>
         </div>
 
         <div class="section-title">2. Thông tin gia đình</div>
         <div class="row g-3">
-            <div class="col-md-6"><label class="small fw-bold">Họ tên Cha</label><input type="text" name="fatherName" class="form-control"></div>
-            <div class="col-md-6"><label class="small fw-bold">SĐT Cha</label><input type="tel" name="fatherPhone" class="form-control"></div>
-            <div class="col-md-6"><label class="small fw-bold">Họ tên Mẹ</label><input type="text" name="motherName" class="form-control"></div>
-            <div class="col-md-6"><label class="small fw-bold">SĐT Mẹ *</label><input type="tel" name="motherPhone" class="form-control" required></div>
+            <div class="col-md-6"><label class="form-label fw-bold small">Họ tên Cha</label><input type="text" name="fatherName" class="form-control"></div>
+            <div class="col-md-6"><label class="form-label fw-bold small">SĐT Cha</label><input type="tel" name="fatherPhone" class="form-control" pattern="[0-9]{10}"></div>
+            <div class="col-md-6"><label class="form-label fw-bold small">Họ tên Mẹ</label><input type="text" name="motherName" class="form-control"></div>
+            <div class="col-md-6"><label class="form-label fw-bold small">SĐT Mẹ *</label><input type="tel" name="motherPhone" class="form-control" pattern="[0-9]{10}" required></div>
         </div>
 
         <div class="section-title">3. Thông tin học vấn & Nguyện vọng</div>
         <div class="row g-3">
-            <div class="col-md-6"><label class="small fw-bold">Trường THPT/THCS *</label><input type="text" name="school" class="form-control" required></div>
-            <div class="col-md-6"><label class="small fw-bold">Tỉnh trường học *</label><input type="text" name="schoolProvince" class="form-control" required></div>
-            <div class="col-md-6"><label class="small fw-bold">Ngành học đăng ký *</label><select name="major" id="majorSelect" class="form-select" required><option value="">Đang tải...</option></select></div>
-            <div class="col-md-6"><label class="small fw-bold">Thầy/Cô tư vấn *</label><select name="counselor" id="counselorSelect" class="form-select" required><option value="">Đang tải...</option></select></div>
-            <div class="col-md-6"><label class="small fw-bold">Điểm trung bình *</label>
-                <select name="score" class="form-select" required>
-                    <option value="8.0-9.0">8.0-9.0</option>
-                    <option value="6.5-7.9">6.5-7.9</option>
-                    <option value="5.0-6.4">5.0-6.4</option>
+            <div class="col-md-6"><label class="form-label fw-bold small">Trường THPT/THCS *</label><input type="text" name="school" class="form-control" required></div>
+            <div class="col-md-6"><label class="form-label fw-bold small">Tỉnh trường học *</label><input type="text" name="schoolProvince" class="form-control" required></div>
+            <div class="col-md-6"><label class="form-label fw-bold small">Hệ đào tạo *</label>
+                <select name="eduSystem" class="form-select">
+                    <option value="Cao đẳng chính quy">Cao đẳng chính quy</option>
+                    <option value="Phổ thông cao đẳng">Phổ thông cao đẳng</option>
                 </select>
             </div>
-            <div class="col-md-6"><label class="small fw-bold">Hiện đang là *</label>
+            <div class="col-md-6"><label class="form-label fw-bold small">Hiện đang là *</label>
                 <select name="situation" class="form-select">
-                    <option value="Học sinh lớp 12">Học sinh lớp 12</option>
                     <option value="Học sinh lớp 9">Học sinh lớp 9</option>
-                    <option value="Đã tốt nghiệp">Đã tốt nghiệp</option>
+                    <option value="Học sinh lớp 12">Học sinh lớp 12</option>
+                    <option value="Đã tốt nghiệp PTTH">Đã tốt nghiệp PTTH</option>
+                    <option value="Đã tốt nghiệp TC, CĐ, ĐH khác">Đã tốt nghiệp TC, CĐ, ĐH khác</option>
                 </select>
+            </div>
+            <div class="col-md-6"><label class="form-label fw-bold small">Ngành học đăng ký *</label><select name="major" id="majorSelect" class="form-select" required><option value="">Đang tải...</option></select></div>
+            <div class="col-md-6"><label class="form-label fw-bold small">Thầy/Cô tư vấn *</label><select name="counselor" id="counselorSelect" class="form-select" required><option value="">Đang tải...</option></select></div>
+            <div class="col-md-12">
+                <label class="form-label fw-bold small">Điểm trung bình *</label>
+                <select id="scoreSelect" class="form-select mb-2" onchange="toggleCustomScore(this.value)">
+                    <option value="6.5-7.9">6.5-7.9</option>
+                    <option value="8.0-9.0">8.0-9.0</option>
+                    <option value="5.0-6.4">5.0-6.4</option>
+                    <option value="Khác">Khác...</option>
+                </select>
+                <input type="text" id="customScore" class="form-control d-none" placeholder="Nhập điểm của bạn">
             </div>
         </div>
 
-        <button type="submit" class="btn btn-submit shadow-lg">GỬI ĐĂNG KÝ NGAY</button>
+        <button type="submit" class="btn btn-submit shadow-lg text-uppercase">Gửi đăng ký ngay</button>
+
+        <div class="footer-note">
+            <strong>* Lưu ý đặc biệt:</strong> Thí sinh có học lực từ 8.0 trở lên sẽ được tuyển thẳng. Thông tin là do thí sinh đăng ký là cơ sở để Nhà trường xét tuyển. Nếu thông tin về điểm xét tuyển không chính xác, kết quả xét tuyển của thí sinh sẽ bị huỷ kể cả khi đã nhận được giấy báo trúng tuyển của Nhà trường. Kết quả xét tuyển sẽ được bảo lưu đến hết ngày 31/12/2025.
+        </div>
     </form>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbymDk6OAjdBZDXMZyYarQYdgoNyGDDMz5APGWXC4C9t2DDnUhk1FdbhlUgDDTa_kH_3/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw_Uz0wZtfpKMEwuxrvo1iMzIyVLNQ_ZMzCScYNpsqmQ7GeHbFCM-RRH4ts1nPYe7dq/exec';
 
-    // LOAD DATA TỪ APPS SCRIPT
     window.addEventListener('DOMContentLoaded', () => {
-        fetch(SCRIPT_URL + '?action=getData') // QUAN TRỌNG: Thêm action=getData
+        fetch(SCRIPT_URL + '?action=getData')
         .then(res => res.json())
         .then(data => {
             document.getElementById('majorSelect').innerHTML = '<option value="">-- Chọn ngành --</option>' + data.nganh.map(n => `<option value="${n}">${n}</option>`).join('');
             document.getElementById('counselorSelect').innerHTML = '<option value="">-- Chọn Thầy/Cô --</option>' + data.tuvan.map(t => `<option value="${t}">${t}</option>`).join('');
-        }).catch(err => alert("Lỗi tải dữ liệu. Hãy kiểm tra URL Apps Script và đảm bảo đã Deploy New Version Anyone."));
+        });
     });
+
+    function toggleCustomScore(val) {
+        const inp = document.getElementById('customScore');
+        if(val === 'Khác') { inp.classList.remove('d-none'); inp.required = true; }
+        else { inp.classList.add('d-none'); inp.required = false; }
+    }
 
     document.getElementById('regForm').onsubmit = async (e) => {
         e.preventDefault();
         const formData = Object.fromEntries(new FormData(e.target));
-        Swal.fire({ title: 'Đang xử lý...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+        const sVal = document.getElementById('scoreSelect').value;
+        formData.score = (sVal === 'Khác') ? document.getElementById('customScore').value : sVal;
+
+        Swal.fire({ title: 'Đang gửi hồ sơ...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
         try {
             const res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(formData) });
             const result = await res.json();
             if(result.result === 'success') {
-                Swal.fire('Thành công!', 'Mã SV: ' + result.studentId, 'success');
+                Swal.fire('Thành công!', 'Hồ sơ đã được gửi. Mã SV: ' + result.studentId, 'success');
                 e.target.reset();
             }
-        } catch (e) { Swal.fire('Lỗi', 'Không thể gửi dữ liệu', 'error'); }
+        } catch (e) { Swal.fire('Lỗi', 'Gửi thất bại!', 'error'); }
     };
 </script>
 </body>
