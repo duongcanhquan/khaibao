@@ -248,17 +248,16 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx1zMJv4vnov3se_XU6BcXKxrTAbx8NZSTt7XfbzQdIgVAh1WQNOq8szyom6iesiMgT/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxl4RJseRBwWtKVjDzD0uaeMPTbMZQSQjvAOGvO00P9erBZexbTSmnmYZecAaD-bIQl/exec';
 
-    // Tải dữ liệu động [cite: 19, 21]
-    window.addEventListener('DOMContentLoaded', () => {
-        fetch(SCRIPT_URL).then(res => res.json()).then(data => {
-            document.getElementById('majorSelect').innerHTML = '<option value="">-- Chọn ngành học --</option>' + 
-                data.nganh.map(n => `<option value="${n}">${n}</option>`).join('');
-            document.getElementById('counselorSelect').innerHTML = '<option value="">-- Chọn tư vấn viên --</option>' + 
-                data.tuvan.map(t => `<option value="${t}">${t}</option>`).join('');
+window.addEventListener('DOMContentLoaded', () => {
+    // Thêm tham số action=getData để Apps Script biết là đang gọi lấy dữ liệu
+    fetch(SCRIPT_URL + '?action=getData') 
+        .then(res => res.json())
+        .then(data => {
+            // Đổ dữ liệu vào select...
         });
-    });
+});
 
     function checkCustomScore(val) {
         const inp = document.getElementById('customScore');
