@@ -320,18 +320,28 @@
     }
 
     // Load Data
+  // Load Data
     window.addEventListener('DOMContentLoaded', () => {
         fetch(SCRIPT_URL + '?action=getData')
             .then(res => res.json())
             .then(data => {
+                console.log("Dữ liệu nhận được:", data); // Dùng để kiểm tra F12 nếu cần
+
+                // 1. Xử lý Ngành học (Thêm || [] để chống lỗi nếu null)
+                const listNganh = data.nganh || [];
                 document.getElementById('majorSelect').innerHTML = '<option value="">-- Chọn ngành học --</option>' + 
-                    data.nganh.map(n => `<option value="${n}">${n}</option>`).join('');
+                    listNganh.map(n => `<option value="${n}">${n}</option>`).join('');
+
+                // 2. Xử lý TVV (Sửa 'tuvan' thành 'tvv' cho khớp Main.gs)
+                const listTVV = data.tvv || []; 
                 document.getElementById('counselorSelect').innerHTML = '<option value="">-- Chọn Thầy/Cô hướng dẫn --</option>' + 
-                    data.tuvan.map(t => `<option value="${t}">${t}</option>`).join('');
+                    listTVV.map(t => `<option value="${t}">${t}</option>`).join('');
             })
             .catch(err => {
                 console.error("Lỗi tải dữ liệu:", err);
-                document.getElementById('majorSelect').innerHTML = '<option value="">Lỗi tải dữ liệu!</option>';
+                // Hiển thị lỗi ra thẻ select để dễ biết
+                document.getElementById('majorSelect').innerHTML = '<option value="">Lỗi kết nối Server!</option>';
+                document.getElementById('counselorSelect').innerHTML = '<option value="">Lỗi kết nối Server!</option>';
             });
     });
 
