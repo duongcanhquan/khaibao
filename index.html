@@ -304,7 +304,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzxFHF0xlW7uumEH8DliFmfwJnPJCTcoo_s4SdmNK46FBSwhMNKkOZsftVeHOEHosM3/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzV976C_HNtcgM7wb989nbNVwCNcol7ekmx22PhrSLaWE7nffSW1fhzZYrhIehnAvc/exec';
 
     // Toggle custom score input
     function toggleCustomScore(val) {
@@ -319,46 +319,45 @@
         }
     }
 
-    // Load Data
- // Load Data
+// Load Data
     window.addEventListener('DOMContentLoaded', () => {
         fetch(SCRIPT_URL + '?action=getData')
             .then(res => res.json())
             .then(data => {
-                // 1. XỬ LÝ NGÀNH HỌC (Hiển thị theo Nhóm)
+                // 1. NGÀNH HỌC (Giữ nguyên logic optgroup)
                 const listNganh = data.nganh || [];
                 let htmlNganh = '<option value="">-- Chọn ngành học --</option>';
                 let inGroup = false;
-
                 listNganh.forEach(item => {
-                    // Nếu dữ liệu từ server trả về là dạng object {name, isGroup}
                     if (item.isGroup) {
-                        // Nếu đang mở 1 group trước đó thì đóng lại
                         if (inGroup) htmlNganh += '</optgroup>';
-                        // Mở group mới (In đậm, không chọn được)
                         htmlNganh += `<optgroup label="${item.name}">`;
                         inGroup = true;
                     } else {
-                        // Là ngành học bình thường -> cho phép chọn
                         htmlNganh += `<option value="${item.name}">${item.name}</option>`;
                     }
                 });
-                // Đóng group cuối cùng nếu có
                 if (inGroup) htmlNganh += '</optgroup>';
-                
                 document.getElementById('majorSelect').innerHTML = htmlNganh;
 
-                // 2. XỬ LÝ TƯ VẤN VIÊN (Bình thường)
-                const listTVV = data.tuvan || []; // Bên Main trả về key là 'tuvan'
+                // 2. TVV
+                const listTVV = data.tuvan || []; 
                 document.getElementById('counselorSelect').innerHTML = '<option value="">-- Chọn Thầy/Cô hướng dẫn --</option>' + 
                     listTVV.map(t => `<option value="${t}">${t}</option>`).join('');
+
+                // 3. HỆ ĐÀO TẠO (MỚI)
+                const listSystems = data.systems || [];
+                // Tìm thẻ select có name="eduSystem"
+                const sysSelect = document.getElementsByName('eduSystem')[0];
+                if (sysSelect) {
+                    sysSelect.innerHTML = listSystems.map(s => `<option value="${s}">${s}</option>`).join('');
+                }
             })
             .catch(err => {
                 console.error("Lỗi tải dữ liệu:", err);
                 document.getElementById('majorSelect').innerHTML = '<option value="">Lỗi kết nối Server!</option>';
             });
     });
-
     // Handle Submit
     document.getElementById('regForm').onsubmit = async (e) => {
         e.preventDefault();
