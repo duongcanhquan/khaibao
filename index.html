@@ -304,7 +304,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz2XO2XVUEYy8TPg8T8PUbRoTmAbr7iuhEe7Q21tp9U68HXJIgCuxnVaQUy7TWXwL39/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx3Yr9riVtX9tNUkuRxuk6D5HvX3Y8Wpt8P4y2tNpRVUZXkzveFPSK2ucfgGtjvevlD/exec';
 
     // Toggle custom score input
     function toggleCustomScore(val) {
@@ -320,28 +320,42 @@
     }
 
     // Load Data
-  // Load Data
+ // Load Data
     window.addEventListener('DOMContentLoaded', () => {
         fetch(SCRIPT_URL + '?action=getData')
             .then(res => res.json())
             .then(data => {
-                console.log("Dữ liệu nhận được:", data); // Dùng để kiểm tra F12 nếu cần
-
-                // 1. Xử lý Ngành học (Thêm || [] để chống lỗi nếu null)
+                // 1. XỬ LÝ NGÀNH HỌC (Hiển thị theo Nhóm)
                 const listNganh = data.nganh || [];
-                document.getElementById('majorSelect').innerHTML = '<option value="">-- Chọn ngành học --</option>' + 
-                    listNganh.map(n => `<option value="${n}">${n}</option>`).join('');
+                let htmlNganh = '<option value="">-- Chọn ngành học --</option>';
+                let inGroup = false;
 
-                // 2. Xử lý TVV (Sửa 'tuvan' thành 'tvv' cho khớp Main.gs)
-                const listTVV = data.tvv || []; 
+                listNganh.forEach(item => {
+                    // Nếu dữ liệu từ server trả về là dạng object {name, isGroup}
+                    if (item.isGroup) {
+                        // Nếu đang mở 1 group trước đó thì đóng lại
+                        if (inGroup) htmlNganh += '</optgroup>';
+                        // Mở group mới (In đậm, không chọn được)
+                        htmlNganh += `<optgroup label="${item.name}">`;
+                        inGroup = true;
+                    } else {
+                        // Là ngành học bình thường -> cho phép chọn
+                        htmlNganh += `<option value="${item.name}">${item.name}</option>`;
+                    }
+                });
+                // Đóng group cuối cùng nếu có
+                if (inGroup) htmlNganh += '</optgroup>';
+                
+                document.getElementById('majorSelect').innerHTML = htmlNganh;
+
+                // 2. XỬ LÝ TƯ VẤN VIÊN (Bình thường)
+                const listTVV = data.tuvan || []; // Bên Main trả về key là 'tuvan'
                 document.getElementById('counselorSelect').innerHTML = '<option value="">-- Chọn Thầy/Cô hướng dẫn --</option>' + 
                     listTVV.map(t => `<option value="${t}">${t}</option>`).join('');
             })
             .catch(err => {
                 console.error("Lỗi tải dữ liệu:", err);
-                // Hiển thị lỗi ra thẻ select để dễ biết
                 document.getElementById('majorSelect').innerHTML = '<option value="">Lỗi kết nối Server!</option>';
-                document.getElementById('counselorSelect').innerHTML = '<option value="">Lỗi kết nối Server!</option>';
             });
     });
 
