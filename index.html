@@ -176,11 +176,11 @@
                 <div class="row g-3">
                     <div class="col-md-6">
                         <label class="form-label">Họ và tên thí sinh *</label>
-                        <input type="text" name="fullName" class="form-control" placeholder="NGUYỄN VĂN A" required>
+                        <input type="text" name="fullName" class="form-control" placeholder="NGUYỄN VĂN A" required oninput="this.value = this.value.toUpperCase()">
                     </div>
                     <div class="col-md-3 col-6">
                         <label class="form-label">Ngày sinh *</label>
-                        <input type="date" name="dob" class="form-control" required>
+                        <input type="text" name="dob" id="dobInput" class="form-control" placeholder="DD/MM/YYYY" maxlength="10" required>
                     </div>
                     <div class="col-md-3 col-6">
                         <label class="form-label">Giới tính *</label>
@@ -199,7 +199,7 @@
                     </div>
                     <div class="col-md-4">
                         <label class="form-label">Số CCCD/Mã định danh *</label>
-                        <input type="text" name="cccd" class="form-control" required>
+                        <input type="text" name="cccd" class="form-control" pattern="\d{9,12}" title="CCCD phải từ 9 đến 12 chữ số" required>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Số điện thoại cá nhân *</label>
@@ -306,6 +306,22 @@
 <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw5e09KwCTSCtg0K6y3B0UJJwkrh6bRzUzlhjmCafJivLA4VTXuR3WiUJAwboQ8TbXg/exec';
 
+    // 1. Xử lý nhập ngày tháng thông minh (Auto-format DD/MM/YYYY)
+    const dobInput = document.getElementById('dobInput');
+    dobInput.addEventListener('input', function(e) {
+        let v = this.value.replace(/\D/g, ''); // Chỉ lấy số
+        if (v.length > 8) v = v.substring(0, 8);
+        
+        // Chèn dấu gạch chéo tự động
+        if (v.length >= 5) {
+            this.value = v.substring(0, 2) + '/' + v.substring(2, 4) + '/' + v.substring(4);
+        } else if (v.length >= 3) {
+            this.value = v.substring(0, 2) + '/' + v.substring(2);
+        } else {
+            this.value = v;
+        }
+    });
+
     // Toggle custom score input
     function toggleCustomScore(val) {
         const inp = document.getElementById('customScore');
@@ -319,12 +335,12 @@
         }
     }
 
-// Load Data
+    // Load Data
     window.addEventListener('DOMContentLoaded', () => {
         fetch(SCRIPT_URL + '?action=getData')
             .then(res => res.json())
             .then(data => {
-                // 1. NGÀNH HỌC (Giữ nguyên logic optgroup)
+                // 1. NGÀNH HỌC
                 const listNganh = data.nganh || [];
                 let htmlNganh = '<option value="">-- Chọn ngành học --</option>';
                 let inGroup = false;
@@ -345,11 +361,10 @@
                 document.getElementById('counselorSelect').innerHTML = '<option value="">-- Chọn Thầy/Cô hướng dẫn --</option>' + 
                     listTVV.map(t => `<option value="${t}">${t}</option>`).join('');
 
-                // 3. HỆ ĐÀO TẠO (MỚI)
+                // 3. HỆ ĐÀO TẠO
                 const listSystems = data.systems || [];
-                // Tìm thẻ select có name="eduSystem"
                 const sysSelect = document.getElementsByName('eduSystem')[0];
-                if (sysSelect) {
+                if (sysSelect && listSystems.length > 0) {
                     sysSelect.innerHTML = listSystems.map(s => `<option value="${s}">${s}</option>`).join('');
                 }
             })
@@ -358,9 +373,17 @@
                 document.getElementById('majorSelect').innerHTML = '<option value="">Lỗi kết nối Server!</option>';
             });
     });
+
     // Handle Submit
     document.getElementById('regForm').onsubmit = async (e) => {
         e.preventDefault();
+        
+        // Kiểm tra logic ngày sinh hợp lệ (đủ 10 ký tự)
+        if(dobInput.value.length < 10) {
+            Swal.fire('Thông báo', 'Vui lòng nhập ngày sinh đúng định dạng DD/MM/YYYY', 'warning');
+            return;
+        }
+
         const formData = Object.fromEntries(new FormData(e.target));
         const sVal = document.getElementById('scoreSelect').value;
         formData.score = (sVal === 'Khác') ? document.getElementById('customScore').value : sVal;
@@ -373,30 +396,26 @@
         });
 
         try {
-            const res = await fetch(SCRIPT_URL, { 
+            // Gửi dữ liệu qua fetch API
+            await fetch(SCRIPT_URL, { 
                 method: 'POST', 
-                mode: 'no-cors', // Dùng no-cors nếu Google Script gặp lỗi CORS
+                mode: 'no-cors',
+                cache: 'no-cache',
                 body: JSON.stringify(formData) 
             });
             
-            // Vì no-cors không trả về body, chúng ta giả định thành công nếu không vào catch
-            // Hoặc nếu bạn đã cấu hình CORS tốt, dùng code cũ của bạn:
-            /*
-            const result = await res.json();
-            if(result.result === 'success') { ... }
-            */
-            
+            // Vì no-cors không đọc được response, mặc định hiển thị thành công nếu không lỗi kết nối
             Swal.fire({
                 icon: 'success',
-                title: 'Thành công!',
-                text: 'Hồ sơ của bạn đã được tiếp nhận thành công.',
+                title: 'Đăng ký thành công!',
+                text: 'Hồ sơ của bạn đã được tiếp nhận. Nhà trường sẽ liên hệ sớm nhất!',
                 confirmButtonColor: '#0056b3'
             });
             e.target.reset();
             document.getElementById('customScore').classList.add('d-none');
             
         } catch (error) {
-            Swal.fire('Lỗi', 'Có lỗi xảy ra khi gửi dữ liệu. Vui lòng thử lại!', 'error');
+            Swal.fire('Lỗi', 'Có lỗi xảy ra khi gửi dữ liệu. Vui lòng thử lại sau!', 'error');
         }
     };
 </script>
