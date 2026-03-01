@@ -199,11 +199,11 @@
                     </div>
                     <div class="col-md-4">
                         <label class="form-label">Số CCCD/Mã định danh *</label>
-                        <input type="text" name="cccd" class="form-control" pattern="\d{9,12}" title="CCCD phải từ 9 đến 12 chữ số" required>
+                        <input type="text" name="cccd" id="cccdInput" class="form-control" placeholder="12 chữ số" required>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Số điện thoại cá nhân *</label>
-                        <input type="tel" name="phone" class="form-control" placeholder="0xxx xxx xxx" pattern="[0-9]{10}" required>
+                        <input type="tel" name="phone" id="phoneInput" class="form-control" placeholder="0xxx xxx xxx" required>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Địa chỉ Email *</label>
@@ -304,7 +304,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwA-SD7yekmRg4lCdXtLGX7kkrctsZ-uccVKgJWximyNnccB5kKSSVoi-cxnT2gogcH/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzxH6j3lVO8PaeJw5c1UE1X3lVgbGEbhiT4SOEGQbWYjAbMtpKb_NmZ1Thz2Ss077M/exec';
 
     // 1. Xử lý nhập ngày tháng thông minh (Auto-format DD/MM/YYYY)
     const dobInput = document.getElementById('dobInput');
@@ -321,6 +321,10 @@
             this.value = v;
         }
     });
+
+    // Chỉ cho phép nhập số vào CCCD và Điện thoại
+    document.getElementById('cccdInput').addEventListener('input', function() { this.value = this.value.replace(/\D/g, ''); });
+    document.getElementById('phoneInput').addEventListener('input', function() { this.value = this.value.replace(/\D/g, ''); });
 
     // Toggle custom score input
     function toggleCustomScore(val) {
@@ -378,11 +382,28 @@
     document.getElementById('regForm').onsubmit = async (e) => {
         e.preventDefault();
         
-        // Kiểm tra logic ngày sinh hợp lệ (đủ 10 ký tự)
-        if(dobInput.value.length < 10) {
-            Swal.fire('Thông báo', 'Vui lòng nhập ngày sinh đúng định dạng DD/MM/YYYY', 'warning');
-            return;
+        // --- KIỂM TRA NGHIÊM NGẶT TRƯỚC KHI GỬI (VALIDATION) ---
+        const dobVal = dobInput.value.trim();
+        const cccdVal = document.getElementById('cccdInput').value;
+        const phoneVal = document.getElementById('phoneInput').value;
+
+        // 1. Kiểm tra Ngày sinh hợp lệ
+        let dobMatch = dobVal.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+        if (!dobMatch) return Swal.fire('Lỗi Ngày Sinh', 'Vui lòng nhập ngày sinh đúng định dạng DD/MM/YYYY (Ví dụ: 15/05/2005)', 'error');
+        let day = parseInt(dobMatch[1]), month = parseInt(dobMatch[2]), year = parseInt(dobMatch[3]);
+        let dim = [31, (year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0)) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+        if (year < 1900 || month < 1 || month > 12 || day < 1 || day > dim[month - 1]) {
+            return Swal.fire('Lỗi Ngày Sinh', 'Ngày tháng năm sinh bạn nhập không hợp lệ!', 'error');
         }
+
+        // 2. Kiểm tra Điện thoại & CCCD
+        if (phoneVal.length !== 10 || !phoneVal.startsWith('0')) {
+            return Swal.fire('Lỗi Số Điện Thoại', 'Số điện thoại phải bao gồm đúng 10 chữ số và bắt đầu bằng số 0.', 'error');
+        }
+        if (cccdVal.length !== 12) {
+            return Swal.fire('Lỗi Căn cước công dân', 'Căn cước công dân / Mã định danh phải bao gồm ĐÚNG 12 CHỮ SỐ.', 'error');
+        }
+        // --------------------------------------------------------
 
         const formData = Object.fromEntries(new FormData(e.target));
         const sVal = document.getElementById('scoreSelect').value;
