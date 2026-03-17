@@ -333,7 +333,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxYnEyKmUioD9M-0UyLyv3EnatmJ9gUSzHC58YPu751I_Ot9oUgiFkjBdOW2rqQrI6D/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxDFNdrMwPx1inbNeEj7e_4NESjoJoZGAyRbEOdIHSXfOnAQIutFY3GJ1JUO0U1z8Y1/exec';
 
     // --- BỘ TỪ ĐIỂN CẢNH BÁO SONG NGỮ ---
     let lang = 'vn';
@@ -507,7 +507,7 @@ if (!idValid) {
                 body: JSON.stringify(formData) 
             });
             
-            Swal.fire({
+           Swal.fire({
                 icon: 'success',
                 title: t.successTitle,
                 text: t.successText,
@@ -515,6 +515,11 @@ if (!idValid) {
             });
             e.target.reset();
             document.getElementById('customScore').classList.add('d-none');
+            
+            // Nhả khóa ô CCCD trả về trạng thái ban đầu
+            const cccdInp = document.getElementById('cccdInput');
+            cccdInp.readOnly = false;
+            cccdInp.style.backgroundColor = "#fafafa";
             
         } catch (error) {
             Swal.fire(t.errTitle, t.errText, 'error');
