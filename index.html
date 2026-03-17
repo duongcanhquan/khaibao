@@ -221,10 +221,15 @@
                         <label class="form-label lang-text" data-vn="Dân tộc *" data-en="Ethnicity *">Dân tộc *</label>
                         <input type="text" name="ethnicity" class="form-control lang-ph" data-phvn="Kinh" data-phen="Kinh / Other" value="Kinh" required>
                     </div>
-                    <div class="col-md-4">
-                        <label class="form-label lang-text" data-vn="Số CCCD/Mã định danh/Passport *" data-en="ID Card / Passport No. *">Số CCCD/Mã định danh/Passport *</label>
-                        <input type="text" name="cccd" id="cccdInput" class="form-control lang-ph" data-phvn="12 số (hoặc Passport)" data-phen="12 digits (or Passport)" placeholder="12 số (hoặc Passport)" required>
-                    </div>
+        <div class="col-md-4">
+    <label class="form-label lang-text" data-vn="Số CCCD/Mã định danh/Passport *" data-en="ID Card / Passport No. *">Số CCCD/Mã định danh/Passport *</label>
+    <input type="text" name="cccd" id="cccdInput" class="form-control lang-ph" data-phvn="12 số (hoặc Passport)" data-phen="12 digits (or Passport)" placeholder="12 số (hoặc Passport)" required>
+    
+    <div class="form-check mt-2 ms-1">
+        <input class="form-check-input" type="checkbox" id="checkNoCCCD_Public" onchange="handleNoCCCD_Public(this)" style="cursor:pointer; transform: scale(1.2);">
+        <label class="form-check-label lang-text ms-1" for="checkNoCCCD_Public" data-vn="Tôi chưa có CCCD/Passport" data-en="I don't have an ID/Passport yet" style="font-size:0.85rem; font-weight:600; cursor:pointer; color:#c0392b;">Tôi chưa có CCCD/Passport</label>
+    </div>
+</div>
                     <div class="col-md-6">
                         <label class="form-label lang-text" data-vn="Số điện thoại (Thêm + nếu SĐT Quốc tế) *" data-en="Phone Number (Add + for Int'l) *">Số điện thoại (Thêm + nếu SĐT Quốc tế) *</label>
                         <input type="tel" name="phone" id="phoneInput" class="form-control lang-ph" data-phvn="0xxx xxx xxx (hoặc +82...)" data-phen="0xxx xxx xxx (or +82...)" placeholder="0xxx xxx xxx (hoặc +82...)" required>
@@ -328,7 +333,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyKpK7q5mCPuVp6SzYs2GlVoD4LKQkuR39YXH8rQgnrHvDH7m5Dlr08g1uH2PkZnGnJ/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxYnEyKmUioD9M-0UyLyv3EnatmJ9gUSzHC58YPu751I_Ot9oUgiFkjBdOW2rqQrI6D/exec';
 
     // --- BỘ TỪ ĐIỂN CẢNH BÁO SONG NGỮ ---
     let lang = 'vn';
@@ -383,12 +388,15 @@
         else this.value = v;
     });
 
-    // Cho phép nhập chữ, số cho Passport. Ép viết hoa.
-    document.getElementById('cccdInput').addEventListener('input', function() { this.value = this.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase(); });
+   // Cho phép nhập chữ, số cho Passport. Ép viết hoa. (Bỏ qua nếu là CHƯA CÓ)
+document.getElementById('cccdInput').addEventListener('input', function() { 
+    if(this.value !== "CHƯA CÓ") this.value = this.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase(); 
+});
     // Cho phép nhập số và dấu + cho SĐT Quốc tế.
     ['phoneInput', 'fatherPhoneInput', 'motherPhoneInput'].forEach(id => {
         document.getElementById(id).addEventListener('input', function() { this.value = this.value.replace(/[^0-9+]/g, ''); });
     });
+
 
     // Toggle custom score input
     function toggleCustomScore(val) {
@@ -467,10 +475,10 @@
             return Swal.fire(t.errPhoneTitle, t.errPhoneInv, 'error');
         }
         
-        let idValid = (/^\d+$/.test(cccdVal) && (cccdVal.length === 9 || cccdVal.length === 12)) || (/^[A-Z0-9]{7,15}$/.test(cccdVal) && !/^\d+$/.test(cccdVal));
-        if (!idValid) {
-            return Swal.fire(t.errIdTitle, t.errIdInv, 'error');
-        }
+       let idValid = (cccdVal === "CHƯA CÓ") || (/^\d+$/.test(cccdVal) && (cccdVal.length === 9 || cccdVal.length === 12)) || (/^[A-Z0-9]{7,15}$/.test(cccdVal) && !/^\d+$/.test(cccdVal));
+if (!idValid) {
+    return Swal.fire(t.errIdTitle, t.errIdInv, 'error');
+}
         // --------------------------------------------------------
 
         const formData = Object.fromEntries(new FormData(e.target));
@@ -512,6 +520,19 @@
             Swal.fire(t.errTitle, t.errText, 'error');
         }
     };
+
+    function handleNoCCCD_Public(checkbox) {
+    const cccdInp = document.getElementById('cccdInput');
+    if (checkbox.checked) {
+        cccdInp.value = "CHƯA CÓ";
+        cccdInp.readOnly = true;
+        cccdInp.style.backgroundColor = "#e9ecef"; // Đổi màu xám
+    } else {
+        cccdInp.value = "";
+        cccdInp.readOnly = false;
+        cccdInp.style.backgroundColor = "#fafafa"; // Trả lại màu gốc
+    }
+}
 </script>
 </body>
 </html>
