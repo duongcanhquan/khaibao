@@ -333,7 +333,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby___u694gpLIo8H2z9iC686ig3GidI2iucRYJmMmZqoD6keEhtahF_Nni5x0UKOLrx/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyPHveGTv4YRxSb1StW7oBaaNnJJOIkAzpqqAz2PVhXtxxWPK4hnXIvdATyI7_XCe8V/exec';
 
     // --- BỘ TỪ ĐIỂN CẢNH BÁO SONG NGỮ ---
     let lang = 'vn';
@@ -437,11 +437,14 @@ document.getElementById('cccdInput').addEventListener('input', function() {
                 document.getElementById('counselorSelect').innerHTML = `<option value="" class="lang-text" data-vn="-- Chọn Thầy/Cô hướng dẫn --" data-en="-- Select Counselor --">${msgs[lang].optTvv}</option>` + 
                     listTVV.map(t => `<option value="${t}">${t}</option>`).join('');
 
-                // 3. HỆ ĐÀO TẠO
+                // 3. HỆ ĐÀO TẠO (Đã thêm dòng "-- Chọn hệ đào tạo --" bắt buộc)
                 const listSystems = data.systems || [];
                 const sysSelect = document.getElementsByName('eduSystem')[0];
                 if (sysSelect && listSystems.length > 0) {
-                    sysSelect.innerHTML = listSystems.map(s => `<option value="${s}">${s}</option>`).join('');
+                    // Chèn thêm option rỗng (value="") vào đầu danh sách
+                    let htmlSys = `<option value="" class="lang-text" data-vn="-- Chọn hệ đào tạo --" data-en="-- Select Education System --">-- Chọn hệ đào tạo --</option>`;
+                    htmlSys += listSystems.map(s => `<option value="${s}">${s}</option>`).join('');
+                    sysSelect.innerHTML = htmlSys;
                 }
             })
             .catch(err => {
