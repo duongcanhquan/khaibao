@@ -501,31 +501,50 @@ if (!idValid) {
             didOpen: () => Swal.showLoading()
         });
 
-        try {
-            // Gửi dữ liệu qua fetch API
-            await fetch(SCRIPT_URL, { 
+    try {
+            // Ép trình duyệt đi theo luồng chuyển hướng của Google và giữ nguyên gói hàng
+            const response = await fetch(SCRIPT_URL, { 
                 method: 'POST', 
-                mode: 'no-cors',
-                cache: 'no-cache',
-                body: JSON.stringify(formData) 
+                headers: {
+                    'Content-Type': 'text/plain;charset=utf-8'
+                },
+                body: JSON.stringify(formData),
+                redirect: "follow"
             });
             
-           Swal.fire({
-                icon: 'success',
-                title: t.successTitle,
-                text: t.successText,
-                confirmButtonColor: '#0056b3'
-            });
-            e.target.reset();
-            document.getElementById('customScore').classList.add('d-none');
-            
-            // Nhả khóa ô CCCD trả về trạng thái ban đầu
-            const cccdInp = document.getElementById('cccdInput');
-            cccdInp.readOnly = false;
-            cccdInp.style.backgroundColor = "#fafafa";
+            // Đọc dạng text trước để đề phòng Google trả về trang báo lỗi HTML
+            const textRes = await response.text(); 
+            let result;
+            try {
+                result = JSON.parse(textRes); // Thử ép sang JSON
+            } catch (jsonErr) {
+                console.error("Lỗi rớt mạng hoặc Google Server lỗi:", textRes);
+                return Swal.fire(t.errTitle, 'Máy chủ đang nghẽn hoặc kết nối mạng yếu. Vui lòng bấm GỬI lại!', 'error');
+            }
+
+            // Nếu xử lý mượt mà và thành công
+            if (result.result === 'success') {
+                Swal.fire({
+                    icon: 'success',
+                    title: t.successTitle,
+                    text: t.successText,
+                    confirmButtonColor: '#0056b3'
+                });
+                e.target.reset();
+                document.getElementById('customScore').classList.add('d-none');
+                
+                const cccdInp = document.getElementById('cccdInput');
+                cccdInp.readOnly = false;
+                cccdInp.style.backgroundColor = "#fafafa";
+                document.getElementById('checkNoCCCD_Public').checked = false;
+                
+            } else {
+                // Nếu bị từ chối do trùng lặp SĐT/CCCD
+                Swal.fire('Từ chối tiếp nhận', result.message || t.errText, 'warning');
+            }
             
         } catch (error) {
-            Swal.fire(t.errTitle, t.errText, 'error');
+            Swal.fire(t.errTitle, 'Không thể kết nối đến máy chủ. Vui lòng kiểm tra lại Wifi/4G!', 'error');
         }
     };
 
