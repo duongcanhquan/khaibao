@@ -289,9 +289,10 @@
                     </div>
                     <div class="col-md-6">
                         <label class="form-label lang-text" data-vn="Hệ đào tạo đăng ký *" data-en="Education System *">Hệ đào tạo đăng ký *</label>
-                        <select name="eduSystem" class="form-select">
+                       <select name="eduSystem" class="form-select">
                             <option value="Cao đẳng chính quy" class="lang-text" data-vn="Cao đẳng chính quy (2 năm 4 tháng)" data-en="Regular College (2 years 4 months)">Cao đẳng chính quy (2 năm 4 tháng)</option>
                             <option value="Phổ thông cao đẳng" class="lang-text" data-vn="Phổ thông cao đẳng (9+)" data-en="High School College (9+)">Phổ thông cao đẳng (9+)</option>
+                            <option value="Liên thông Trung Cấp Cao Đẳng" class="lang-text" data-vn="Liên thông Trung Cấp - Cao Đẳng" data-en="Inter-level College Transfer">Liên thông Trung Cấp - Cao Đẳng</option>
                         </select>
                     </div>
                     <div class="col-md-6">
@@ -333,7 +334,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyWlQKqZG59lTOzYq7wLbndY7oBah_Zqa9RKX5BkpwwTIT98cPoM7Gd7ZipEiYgPpIR/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxXvsIblw9V1Cq9OYvFqz-cfaghTjb_LWbb-qHf5h05vQVJJ5iESLGoRxWitMHrUQM_/exec';
 
     // --- BỘ TỪ ĐIỂN CẢNH BÁO SONG NGỮ ---
     let lang = 'vn';
@@ -437,13 +438,22 @@ document.getElementById('cccdInput').addEventListener('input', function() {
                 document.getElementById('counselorSelect').innerHTML = `<option value="" class="lang-text" data-vn="-- Chọn Thầy/Cô hướng dẫn --" data-en="-- Select Counselor --">${msgs[lang].optTvv}</option>` + 
                     listTVV.map(t => `<option value="${t}">${t}</option>`).join('');
 
-                // 3. HỆ ĐÀO TẠO (Đã thêm dòng "-- Chọn hệ đào tạo --" bắt buộc)
+                           // 3. HỆ ĐÀO TẠO (Đã sửa lỗi mất Tiếng Anh và thêm Liên thông)
                 const listSystems = data.systems || [];
                 const sysSelect = document.getElementsByName('eduSystem')[0];
                 if (sysSelect && listSystems.length > 0) {
-                    // Chèn thêm option rỗng (value="") vào đầu danh sách
                     let htmlSys = `<option value="" class="lang-text" data-vn="-- Chọn hệ đào tạo --" data-en="-- Select Education System --">-- Chọn hệ đào tạo --</option>`;
-                    htmlSys += listSystems.map(s => `<option value="${s}">${s}</option>`).join('');
+                    
+                    listSystems.forEach(s => {
+                        let textVN = s; let textEN = s;
+                        // Tự động nhận diện và ghép bản dịch Tiếng Anh / Ghi chú cho các hệ
+                        if (s.includes("Cao đẳng chính quy")) { textVN = "Cao đẳng chính quy (2 năm 4 tháng)"; textEN = "Regular College (2 years 4 months)"; }
+                        else if (s.includes("Phổ thông cao đẳng") || s.includes("9+")) { textVN = "Phổ thông cao đẳng (9+)"; textEN = "High School College (9+)"; }
+                        else if (s.includes("Liên thông")) { textVN = "Liên thông Trung Cấp - Cao Đẳng"; textEN = "Inter-level College Transfer"; }
+                        
+                        // Ghép class lang-text để nút bấm VN/EN có thể dịch được
+                        htmlSys += `<option value="${s}" class="lang-text" data-vn="${textVN}" data-en="${textEN}">${lang === 'vn' ? textVN : textEN}</option>`;
+                    });
                     sysSelect.innerHTML = htmlSys;
                 }
             })
